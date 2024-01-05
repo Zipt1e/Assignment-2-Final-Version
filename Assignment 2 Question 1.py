@@ -26,7 +26,7 @@ for file_path in csv_file_paths:
     all_text.append(f"\n===== End {file_path} =====\n")
 
 # Path to the output text file
-output_text_file_path = r'C:\Users\azali\OneDrive\Documents\GitHub\HIT137\combined_data.txt'
+output_text_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_data.txt'
 
 # Write all the text to the output file
 with open(output_text_file_path, 'w', encoding='utf-8') as file:
@@ -44,7 +44,7 @@ from collections import Counter
 import csv
 
 # Path to the text file
-text_file_path = r'C:\Users\azali\OneDrive\Documents\GitHub\HIT137\combined_data.txt'
+text_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_data.txt'
 
 # Read the text file
 with open(text_file_path, 'r', encoding='utf-8') as file:
@@ -60,7 +60,7 @@ word_counts = Counter(words)
 top_30_words = word_counts.most_common(30)
 
 # Path to the output CSV file
-output_csv_path = r'C:\Users\azali\OneDrive\Documents\GitHub\HIT137\top_30_words.csv'
+output_csv_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\top_30_words.csv'
 
 # Write the 'Top 30' common words and their counts to a CSV file
 with open(output_csv_path, 'w', newline='', encoding='utf-8') as csv_file:
@@ -93,7 +93,7 @@ def count_top_tokens(text_path, top_n=30):
     return top_tokens
 
 # Path to the text file
-text_file_path = r'C:\Users\azali\OneDrive\Documents\GitHub\HIT137\combined_data.txt'
+text_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_data.txt'
 
 # Get the top 30 tokens
 top_30_tokens = count_top_tokens(text_file_path)
