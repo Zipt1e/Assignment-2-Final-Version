@@ -29,7 +29,7 @@ for file_path in csv_file_paths:
 output_txt_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_text.txt'
 with open(output_txt_path, 'w', encoding='utf-8') as file:
     file.write('\n'.join(all_texts))
-
+print(f'Combined txt Built saved to {output_txt_path}')
 
 #Task 3.1
 from collections import Counter
@@ -85,3 +85,30 @@ try:
 except Exception as e:
     print(f"Error writing output file: {e}")
     exit(1)
+
+
+# Task 4
+    txt_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_text.txt'
+
+with open(txt_file_path, 'r', encoding='utf-8') as file:
+    text = file.read()
+
+import spacy
+
+# Load the Spacy model
+# Choose either 'en_core_sci_sm' or 'en_ner_bc5cdr_md' based on availability and requirement
+nlp = spacy.load('en_core_sci_sm')  # or 'en_ner_bc5cdr_md'
+
+doc = nlp(text)
+
+# Extract 'diseases' and 'drugs' entities
+entities_spacy = [(ent.text, ent.label_) for ent in doc.ents if ent.label_ in ['DISEASE', 'CHEMICAL']]
+
+from collections import Counter
+
+# Example: Counting entities
+entities_count_spacy = Counter([label for _, label in entities_spacy])
+
+# You would do similar processing for the BioBERT extracted entities
+
+# Then you can compare these counts and the specific entities extracted by each model
