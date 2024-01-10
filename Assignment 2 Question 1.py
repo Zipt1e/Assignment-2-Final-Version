@@ -1,96 +1,87 @@
+#Task 1
+
+import os
+import csv
+
 # Paths to the CSV files
 csv_file_paths = [
-r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\CSV1.csv',
-r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\CSV2.csv',
-r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\CSV3.csv',
-r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\CSV4.csv'
+    r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\CSV1.csv',
+    r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\CSV2.csv',
+    r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\CSV3.csv',
+    r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\CSV4.csv'
 ]
- 
-# Initialize an empty list to store all text
-all_text = []
- 
-# Function to process a single CSV file
-def process_csv(file_path):
-with open(file_path, 'r', encoding='utf-8') as file:
-reader = csv.reader(file)
-# Join each row's content with a comma and collect all rows in a list
-return [" ".join(row) for row in reader]
- 
-# Loop through each CSV file path
+
+all_texts = []
+
 for file_path in csv_file_paths:
-csv_content = process_csv(file_path)
-all_text.append(f"===== Begin {file_path} =====\n")
-all_text.append("\n".join(csv_content))
-all_text.append(f"\n===== End {file_path} =====\n")
- 
-# Path to the output text file
-output_text_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_data.txt'
- 
-# Write all the text to the output file
-with open(output_text_file_path, 'w', encoding='utf-8') as file:
-file.write("\n".join(all_text))
- 
-print(f"Data extracted from all CSV files into {output_text_file_path}")
- 
-import re
+    if os.path.isfile(file_path):
+        with open(file_path, 'r', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            headers = next(reader)
+            max_text_column = max(range(len(headers)), key=lambda i: sum(len(row[i]) for row in reader))
+            file.seek(0)
+            next(reader)  # Skip header line
+            all_texts.extend(row[max_text_column].strip() for row in reader if len(row) > max_text_column)
+    else:
+        print(f"File '{file_path}' not found. Skipping.")
+
+# Writing all extracted text to a new file
+output_txt_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_text.txt'
+with open(output_txt_path, 'w', encoding='utf-8') as file:
+    file.write('\n'.join(all_texts))
+
+
+#Task 3.1
 from collections import Counter
-import csv
- 
-# Path to the text file
-text_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_data.txt'
- 
-# Read the text file
-with open(text_file_path, 'r', encoding='utf-8') as file:
-text = file.read()
- 
-# Use regular expression to extract words from the text
-words = re.findall(r'\w+', text.lower())
- 
-# Count the occurrences of each word
+
+txt_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_text.txt'
+
+with open(txt_file_path, 'r', encoding='utf-8') as file:
+    words = file.read().split()
 word_counts = Counter(words)
- 
-# Get the 'Top 30' most common words
 top_30_words = word_counts.most_common(30)
- 
-# Path to the output CSV file
-output_csv_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\top_30_words.csv'
- 
-# Write the 'Top 30' common words and their counts to a CSV file
-with open(output_csv_path, 'w', newline='', encoding='utf-8') as csv_file:
-writer = csv.writer(csv_file)
-writer.writerow(['Word', 'Count']) # Writing the header
-writer.writerows(top_30_words)
- 
-print(f"Top 30 common words and their counts are stored in {output_csv_path}")
- 
+
+csv_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\top_30_words.csv'
+
+with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+    csv_writer = csv.writer(csvfile)
+    csv_writer.writerow(['Word', 'Count'])
+    csv_writer.writerows(top_30_words)
+
+print(f'Top 30 words and counts saved to {csv_file_path}')
+
+# Task 3.2
 from transformers import AutoTokenizer
 from collections import Counter
- 
-def count_top_tokens(text_path, top_n=30):
-# Load the tokenizer
-tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
- 
-# Read the text file
-with open(text_path, 'r', encoding='utf-8') as file:
-text = file.read()
- 
-# Tokenize the text
-tokens = tokenizer.tokenize(text)
- 
-# Count the occurrences of each token
-token_counts = Counter(tokens)
- 
-# Get the top 'n' most common tokens
-top_tokens = token_counts.most_common(top_n)
- 
-return top_tokens
- 
-# Replace with the path to your text file
-text_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_data.txt'
- 
-# Get the top 30 tokens
-top_30_tokens = count_top_tokens(text_file_path)
- 
-# Display the top 30 tokens
-for token, count in top_30_tokens:
-print(f"{token}: {count}")
+
+biobert_model_name = 'dmis-lab/biobert-base-cased-v1.1'
+
+try:
+    tokenizer = AutoTokenizer.from_pretrained(biobert_model_name)
+except Exception as e:
+    print(f"Error initializing tokenizer: {e}")
+    exit(1)
+
+def count_unique_tokens(text):
+    tokens = tokenizer.tokenize(text)
+    return Counter(tokens).most_common(30)
+
+txt_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_text.txt'
+
+try:
+    with open(txt_file_path, 'r', encoding='utf-8') as file:
+        combined_text = file.read()
+    top_30_tokens = count_unique_tokens(combined_text)
+except Exception as e:
+    print(f"Error processing text file: {e}")
+    exit(1)
+
+output_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\top_30_tokens_biobert.txt'
+try:
+    with open(output_file_path, 'w', encoding='utf-8') as file:
+        for token, count in top_30_tokens:
+            file.write(f"{token}: {count}\n")
+    print(f'Top 30 tokens saved to {output_file_path}')
+except Exception as e:
+    print(f"Error writing output file: {e}")
+    exit(1)
