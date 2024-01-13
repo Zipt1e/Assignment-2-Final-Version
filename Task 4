@@ -46,7 +46,7 @@ def extract_entities_biobert(text, tokenizer, model):
     return entities
 
 # Path to the combined text file
-txt_file_path = '/Users/justincooper/Desktop/Alireza Code/Output/combined_text.txt'
+txt_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_text.txt'
 
 # Read the text from the file
 with open(txt_file_path, 'r', encoding='utf-8') as file:
