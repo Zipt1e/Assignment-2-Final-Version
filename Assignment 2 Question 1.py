@@ -1,3 +1,6 @@
+# Question 1
+#Github Repository Link: https://github.com/Zipt1e/Assignment-2-Final-Version.git
+
 #Task 1
 
 import os
@@ -20,7 +23,7 @@ for file_path in csv_file_paths:
             headers = next(reader)
             max_text_column = max(range(len(headers)), key=lambda i: sum(len(row[i]) for row in reader))
             file.seek(0)
-            next(reader)  # Skip header line
+            next(reader)  
             all_texts.extend(row[max_text_column].strip() for row in reader if len(row) > max_text_column)
     else:
         print(f"File '{file_path}' not found. Skipping.")
@@ -85,6 +88,8 @@ try:
 except Exception as e:
     print(f"Error writing output file: {e}")
     exit(1)
+
+# Task 4
     
 import spacy
 from transformers import AutoTokenizer, AutoModelForTokenClassification
