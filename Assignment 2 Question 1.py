@@ -85,7 +85,8 @@ try:
 except Exception as e:
     print(f"Error writing output file: {e}")
     exit(1)
-    import spacy
+    
+import spacy
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 import torch
 from collections import Counter
