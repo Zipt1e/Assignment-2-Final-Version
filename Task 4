@@ -20,7 +20,7 @@ def extract_entities_spacy(text, model):
 
 # Function to extract entities using BioBERT
 def extract_entities_biobert(text, tokenizer, model):
-    inputs = tokenizer(text, return_tensors="pt")
+    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
     outputs = model(**inputs)
     logits = outputs.logits
     predictions = torch.argmax(logits, dim=2)
@@ -30,7 +30,7 @@ def extract_entities_biobert(text, tokenizer, model):
     entities = []
     current_entity = ''
     
-    for token, prediction in zip(tokenizer.tokenize(text), predictions[0].tolist()):
+    for token, prediction in zip(tokenizer.tokenize(text, return_tensors="pt", truncation=True, padding=True), predictions[0].tolist()):
         label = id2label[prediction]
         
         if label.startswith('I-'):
@@ -45,8 +45,9 @@ def extract_entities_biobert(text, tokenizer, model):
     
     return entities
 
+
 # Path to the combined text file
-txt_file_path = r'C:\Users\azali\OneDrive\Desktop\CDU\SUM Sem 2023\Now Software\Program 2\combined_text.txt'
+txt_file_path = '/Users/justincooper/Desktop/Alireza Code/Output/combined_text.txt'
 
 # Read the text from the file
 with open(txt_file_path, 'r', encoding='utf-8') as file:
