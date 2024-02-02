@@ -38,15 +38,29 @@ def draw_panel():
 
 #fighter class
 class Fighter():
-    def_init_(self,x,y,name,max_hp, strength, potions, lives):
-    self.name = name 
-    self.max_hp 
-    self.hp = max_hpself.strength = strength 
-    self.start_potions = potionsself.potions = potions
-    self.lives = lives 
-    self.alive = True 
-    self.image = pygame.image.load()
+    def __init__(self, x, y, name, max_hp, strength, potions, lives):
+        self.name = name 
+        self.max_hp = max_hp
+        self.hp = max_hp
+        self.strength = strength 
+        self.start_potions = potions
+        self.lives = lives 
+        self.alive = True 
+        img = pygame.image.load(f'Battle Game/img/{self.name}/animation/Idle/idle_1.png')
+        self.image = pygame.transform.scale(img, (img.get_width()/3, img.get_height()/3)) #This line is added in to reduce the size of the images as they too big 
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
 
+    def draw(self):
+        screen.blit(self.image, self.rect)
+
+knight = Fighter(100, 260, 'Knight', 30, 10, 3, 3)
+bandit1 = Fighter(550, 270, 'Bandit', 20, 6, 1, 1)
+bandit2 = Fighter(700, 270, 'Bandit', 20, 6, 1, 1)
+
+bandit_list = []
+bandit_list.append(bandit1)
+bandit_list.append(bandit2)
 
 run = True 
 while run:
@@ -58,6 +72,11 @@ while run:
 
     #Draw panel 
     draw_panel()
+
+    #Draw fighters 
+    knight.draw()
+    for bandit in bandit_list:
+        bandit.draw()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
